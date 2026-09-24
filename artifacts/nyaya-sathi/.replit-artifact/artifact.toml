@@ -1,0 +1,28 @@
+kind = "web"
+previewPath = "/"
+title = "Nyaya Sathi Legal Services"
+description = "A premium Hindi-first legal services web app for Uttar Pradesh clients, with case workflows, Lucknow news, guided AI drafting, UPI payment shortcuts, and PWA support."
+version = "1.0.0"
+id = "artifacts/nyaya-sathi"
+router = "path"
+
+[[services]]
+name = "web"
+paths = [ "/" ]
+localPort = 21155
+
+[services.development]
+run = "pnpm --filter @workspace/nyaya-sathi run dev"
+
+[services.production]
+build = [ "pnpm", "--filter", "@workspace/nyaya-sathi", "run", "build" ]
+serve = "static"
+publicDir = "artifacts/nyaya-sathi/dist/public"
+
+[[services.production.rewrites]]
+from = "/*"
+to = "/index.html"
+
+[services.env]
+PORT = "21155"
+BASE_PATH = "/"

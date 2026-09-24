@@ -10,6 +10,8 @@ servers:
 tags:
   - name: health
     description: Health operations
+  - name: legal
+    description: Nyaya Sathi legal service operations
 paths:
   /healthz:
     get:
@@ -24,6 +26,82 @@ paths:
             application/json:
               schema:
                 $ref: "#/components/schemas/HealthStatus"
+  /legal/overview:
+    get:
+      operationId: getLegalOverview
+      tags: [legal]
+      summary: Get the Nyaya Sathi home overview
+      responses:
+        "200":
+          description: Home overview
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegalOverview"
+  /legal/case-models:
+    get:
+      operationId: listCaseModels
+      tags: [legal]
+      summary: List supported legal case models
+      responses:
+        "200":
+          description: Supported case models
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/CaseModel"
+  /legal/news:
+    get:
+      operationId: listNewsFeeds
+      tags: [legal]
+      summary: List curated Lucknow news feeds
+      responses:
+        "200":
+          description: News items grouped by source
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: "#/components/schemas/NewsItem"
+  /legal/requests:
+    post:
+      operationId: createLegalRequest
+      tags: [legal]
+      summary: Submit a legal service request
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/LegalRequestInput"
+      responses:
+        "201":
+          description: Submitted request
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/LegalRequest"
+  /legal/ai/guidance:
+    post:
+      operationId: getLegalGuidance
+      tags: [legal]
+      summary: Get step-by-step legal communication or drafting guidance
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: "#/components/schemas/GuidanceInput"
+      responses:
+        "200":
+          description: Guided response
+          content:
+            application/json:
+              schema:
+                $ref: "#/components/schemas/GuidanceResponse"
 components:
   schemas:
     HealthStatus:
@@ -33,4 +111,100 @@ components:
           type: string
       required:
         - status
+    LegalOverview:
+      type: object
+      properties:
+        activeCases:
+          type: integer
+        responseTime:
+          type: string
+        supportedDistricts:
+          type: integer
+        nextHearing:
+          type: ["string", "null"]
+      required: [activeCases, responseTime, supportedDistricts, nextHearing]
+    CaseModel:
+      type: object
+      properties:
+        id:
+          type: string
+        title:
+          type: string
+        subtitle:
+          type: string
+        category:
+          type: string
+        startingFee:
+          type: string
+        turnaround:
+          type: string
+        description:
+          type: string
+      required: [id, title, subtitle, category, startingFee, turnaround, description]
+    NewsItem:
+      type: object
+      properties:
+        id:
+          type: string
+        source:
+          type: string
+        title:
+          type: string
+        timestamp:
+          type: string
+        href:
+          type: string
+        accent:
+          type: string
+      required: [id, source, title, timestamp, href, accent]
+    LegalRequestInput:
+      type: object
+      properties:
+        name:
+          type: string
+          minLength: 2
+        phone:
+          type: string
+          minLength: 10
+        caseModel:
+          type: string
+        message:
+          type: string
+          minLength: 10
+      required: [name, phone, caseModel, message]
+    LegalRequest:
+      allOf:
+        - $ref: "#/components/schemas/LegalRequestInput"
+        - type: object
+          properties:
+            id:
+              type: string
+            status:
+              type: string
+            createdAt:
+              type: string
+          required: [id, status, createdAt]
+    GuidanceInput:
+      type: object
+      properties:
+        intent:
+          type: string
+        context:
+          type: string
+          minLength: 5
+      required: [intent, context]
+    GuidanceResponse:
+      type: object
+      properties:
+        title:
+          type: string
+        summary:
+          type: string
+        steps:
+          type: array
+          items:
+            type: string
+        disclaimer:
+          type: string
+      required: [title, summary, steps, disclaimer]
 

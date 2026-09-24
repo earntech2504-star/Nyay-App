@@ -1,0 +1,1 @@
+- [Supabase connector access](supabase-connector.md) — use the authenticated proxy; table access depends on RLS and anon-scoped connections may reject schema discovery.

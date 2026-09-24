@@ -1,0 +1,19 @@
+{
+  "name": "न्याय साथी | Legal Services",
+  "short_name": "न्याय साथी",
+  "description": "उत्तर प्रदेश में सरल और भरोसेमंद कानूनी सहायता।",
+  "start_url": "/",
+  "scope": "/",
+  "display": "standalone",
+  "background_color": "#F7FAFC",
+  "theme_color": "#123F63",
+  "lang": "hi",
+  "icons": [
+    {
+      "src": "/favicon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}

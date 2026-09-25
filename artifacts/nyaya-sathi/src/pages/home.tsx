@@ -18,7 +18,13 @@ export default function Home() {
   const cases = useListCaseModels();
   const news = useListNewsFeeds({ query: { queryKey: getListNewsFeedsQueryKey(), refetchInterval: 5 * 60 * 1000 } });
   const rawCases = (cases.data as any);
-const casesArray = Array.isArray(rawCases) ? rawCases : rawCases?.data ?? rawCases?.items ?? [];
+const casesArray = (() => {
+  if (Array.isArray(rawCases)) return rawCases;
+  if (Array.isArray(rawCases?.data)) return rawCases.data;
+  if (Array.isArray(rawCases?.items)) return rawCases.items;
+  if (Array.isArray(rawCases?.cases)) return rawCases.cases;
+  return [];
+})();
 const featuredCases = casesArray.slice(0, 4);
 
   return (

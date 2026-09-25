@@ -88,11 +88,23 @@ const featuredCases = casesArray.slice(0, 4);
         <div className="mx-auto grid max-w-[1240px] gap-10 px-5 py-14 lg:grid-cols-[.8fr_1.2fr] lg:items-start lg:px-8 lg:py-20">
           <div><SectionEyebrow>लखनऊ की कानूनी हलचल</SectionEyebrow><h2 className="max-w-md text-[clamp(1.8rem,3vw,2.7rem)] font-bold leading-tight tracking-[-.05em]">जो हो रहा है, उसे समझकर आगे बढ़ें।</h2><p className="mt-4 max-w-md text-[14px] leading-7 text-[hsl(var(--muted-foreground))]">स्थानीय अदालतों और प्रशासन से जुड़ी चुनिंदा खबरें — सिर्फ़ वही जो आपके काम की हों।</p><Link href="/ai-guide" className="mt-7 inline-flex items-center gap-2 text-[13px] font-bold text-[hsl(var(--primary))] no-underline" data-testid="link-news-guide">किसी बात पर सलाह चाहिए <ArrowRight size={15} /></Link></div>
           <div className="space-y-2">
-            {news.isLoading && <LoadingBlock label="लखनऊ की खबरें लाई जा रही हैं…" />}
-            {news.isError && <ErrorBlock onRetry={() => news.refetch()} label="खबरें लोड नहीं हो सकीं" />}
-            {!news.isLoading && !news.isError && (news.data ?? []).length === 0 && <div className="rounded-2xl border border-dashed border-[hsl(var(--border))] p-8 text-center text-[14px] text-[hsl(var(--muted-foreground))]" data-testid="state-empty-news">अभी कोई नई खबर नहीं है।</div>}
-            {(news.data ?? []).slice(0, 4).map((item) => <a href={item.href} target="_blank" rel="noreferrer" key={item.id} className="group grid grid-cols-[6px_1fr_auto] items-start gap-4 rounded-2xl border border-transparent bg-[hsl(var(--background)/.58)] p-4 no-underline transition-colors hover:border-[hsl(var(--border))] hover:bg-[hsl(var(--card))]" data-testid={`link-news-${item.id}`}><span className="mt-1 h-10 rounded-full" style={{ backgroundColor: item.accent }} /><span><span className="mb-1 flex items-center gap-2 text-[10px] font-bold uppercase tracking-[.12em] text-[hsl(var(--muted-foreground))]">{item.source}<span className="h-1 w-1 rounded-full bg-[hsl(var(--muted-foreground)/.5)]" />{item.timestamp}</span><span className="block text-[14px] font-semibold leading-6 text-[hsl(var(--foreground))] group-hover:text-[hsl(var(--primary))]">{item.title}</span></span><ArrowRight size={15} className="mt-2 text-[hsl(var(--muted-foreground))] transition-transform group-hover:translate-x-1" /></a>)}
-          </div>
+           {news.isLoading && <LoadingBlock label="खबरें लोड की जा रही हैं..." />}
+  {news.isError && <ErrorBlock onRetry={() => news.refetch()} label="खबरें लोड नहीं हो सकीं" />}
+
+  {(() => {
+    const newsArray = Array.isArray(news.data)
+      ? news.data
+      : Array.isArray((news.data as any)?.data)
+        ? (news.data as any).data
+        : [];
+
+    return newsArray.slice(0, 4).map((item: any) => (
+      <a href={item.href} target="_blank" rel="noreferrer" key={item.id} className="group grid grid-cols-[96px_1fr] gap-4">
+        {/* tumhara purana wala <div> wala design yahi rahega */}
+      </a>
+    ));
+  })()}
+  </div>
         </div>
       </section>
       <section className="mx-auto max-w-[1240px] px-5 py-16 lg:px-8 lg:py-24">

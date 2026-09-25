@@ -17,7 +17,9 @@ export default function Home() {
   const overview = useGetLegalOverview();
   const cases = useListCaseModels();
   const news = useListNewsFeeds({ query: { queryKey: getListNewsFeedsQueryKey(), refetchInterval: 5 * 60 * 1000 } });
-  const featuredCases = cases.data?.slice(0, 4) ?? [];
+  const rawCases = (cases.data as any);
+const casesArray = Array.isArray(rawCases) ? rawCases : rawCases?.data ?? rawCases?.items ?? [];
+const featuredCases = casesArray.slice(0, 4);
 
   return (
     <div>
